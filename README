@@ -1,5 +1,26 @@
 A simple ruby library to scrape IMDB
 
+FORK:
+
+This project was forked at the RubyJax May 2009 "Pair Programming" meeting as
+an experiment to see if we could add search.
+Thanks to my pair Imre Mehesz, you can now search for a movie.
+
+__Demo__
+
+>> require 'lib/imdb'
+>> movies = Imdb.find_movie_by_name("The Godfather")
+=> [#<Imdb::SearchResult:0x53ceb0 @id="tt0068646", @name="The Godfather (1972) aka \"Mario Puzo&#x27;s The Godfather\" - USA (complete title)", @url="http://imdb.com/title/tt0068646/">, #<Imdb::SearchResult:0x51adb0 @id="tt0071562", @name="The Godfather: Part II (1974) aka \"Mario Puzo&#x27;s The Godfather: Part II\" - USA (complete title)aka \"The Second Godfather\" - USA (working title)", @url="http://imdb.com/title/tt0071562/">, #<Imdb::SearchResult:0x507e68 @id="tt0099674", @name="The Godfather: Part III (1990) aka \"Mario Puzo&#x27;s The Godfather: Part III\" - USA (complete title)", @url="http://imdb.com/title/tt0099674/">]
+>> movies.last.name
+=> "The Godfather: Part III (1990) aka "Mario Puzo&#x27;s The Godfather: Part III" - USA (complete title)"
+>> movies.last.url
+=> "http://imdb.com/title/tt0099674/"
+>> movies.last.id
+=> "tt0099674"
+
+>> Imdb.find_movie_by_id(movies.last.id)
+=> #<ImdbMovie:0x11e45b4 @rating="7.6", @tagline="All the power on earth can&#x27;t change destiny.", @writers=[#<ImdbName:0x68f88 @name="Mario Puzo", @imdb_id="nm0701374", @role="written by">, #<ImdbName:0x68dd0 @name="Francis Ford Coppola", @imdb_id="nm0000338", @role="written by">], runtime"162 min  | USA:169 min (video version)", title"The Godfather: Part III", release_date#<Date: 4896501/2,0,2299161, @imdb_id="tt0099674", @plot="In the midst of trying to legitimize his business dealings in 1979 New York and Italy, aging mafia don Michael Corleone seeks to vow for his sins while taking a young prot\351g\351 under his wing.", @genres=[#<ImdbGenre:0x425b8 @name="Action", @imdb_id="Action">, #<ImdbGenre:0x4176c @name="Crime", @imdb_id="Crime">, #<ImdbGenre:0x41370 @name="Drama", @imdb_id="Drama">, #<ImdbGenre:0x4095c @name="Thriller", @imdb_id="Thriller">], poster_url"http://ia.media-imdb.com/images/M/MV5BMTc3NzQ5ODYyMF5BMl5BanBnXkFtZTcwNDc1NzgyMQ@@._V1._SX98_SY140_.jpg", company#<ImdbCompany:0x119c55c @name="Paramount Pictures", @imdb_id="co0023400">, directors[#<ImdbName:0x6fff4 @name="Francis Ford Coppola", @imdb_id="nm0000338", @role=nil>]
+
 USAGE:
 
 require 'Imdb'
