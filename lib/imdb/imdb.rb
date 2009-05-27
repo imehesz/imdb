@@ -1,10 +1,13 @@
 class Imdb
 
+  IMDB_BASE_URL = "http://imdb.com"
   IMDB_MOVIE_BASE_URL = "http://www.imdb.com/title/"
   IMDB_NAME_BASE_URL = "http://www.imdb.com/name/"
   IMDB_COMPANY_BASE_URL = "http://www.imdb.com/company/"
   IMDB_GENRE_BASE_URL = "http://www.imdb.com/Sections/Genres/"
   IMDB_SEARCH_BASE_URL = "http://imdb.com/find?s=all&q="
+  POPULAR_TITLES_INDEX = 4
+  POPULAR_TITLES_CSS_PATH = "#outerbody > tr:nth(0) > table > td > table > tr:nth(1) > td > p:nth(1) > table"
 
   def self.find_movie_by_id(id)
     
@@ -58,11 +61,23 @@ class Imdb
         end
       end
     end 
-
     movie # return movie
-
   end
 
+  def self.find_movie_by_name(name)
+    doc = Hpricot open(query_url(name))
+    popular_titles_table = doc.search('table')[POPULAR_TITLES_INDEX]
+    if popular_titles_table
+      if popular_titles = popular_titles_table.search('tr')
+        popular_titles.map do |row|
+          data = row.search('td')[2]
+          name = data.inner_text.strip.gsub(/[^[:print:]]/,'').squeeze(' ')
+          url = URI.join(IMDB_BASE_URL, data.at('a').get_attribute('href')).to_s
+          SearchResult.new name, url
+        end
+      end
+    end
+  end
 
   protected
   
@@ -98,5 +113,7 @@ class Imdb
     end
   end
 
-  
+  def self.query_url(name)
+    URI.escape((IMDB_SEARCH_BASE_URL + name).downcase)
+  end
 end
